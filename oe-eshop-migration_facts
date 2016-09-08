@@ -1,0 +1,52 @@
+#!/bin/bash
+
+[ -z $ESHOP_FACTS ] && echo "Please run this script through oe-eshop-facts, e.g. ./oe-eshop-facts $0" && exit 1
+. $ESHOP_FACT_BIN_PATH
+. "$ESHOP_FACT_BASEDIR/oe-eshop-edition_facts"
+
+function main {
+    get_input_values
+    display_input_values
+    export_input_values
+}
+
+function get_input_values {
+    local MIGRATION_SUFFIX='migration'
+    local EDITION="$ESHOP_EDITION"
+
+    : ${ESHOP_CE_MIGRATION_PATH:=$(get_existing_full_path_name "$ESHOP_SOURCE_PATH/$MIGRATION_SUFFIX")}
+    : ${ESHOP_PROJECT_MIGRATION_PATH:=$(get_existing_full_path_name "$ESHOP_CE_MIGRATION_PATH")}
+
+    ([ $EDITION == "PE" ] || [ $EDITION == "EE" ]) && \
+        : ${ESHOP_PE_MIGRATION_PATH:=$(get_existing_full_path_name "$ESHOP_PE_ROOT_PATH/$MIGRATION_SUFFIX")}
+
+    [ $EDITION == "EE" ] && \
+        : ${ESHOP_EE_MIGRATION_PATH:=$(get_existing_full_path_name "$ESHOP_EE_ROOT_PATH/$MIGRATION_SUFFIX")}
+}
+
+function display_input_values {
+    [ "$ESHOP_VERBOSE_MIGRATION_FACTS_DISPLAYED" == "1" ] && return 0
+
+    if [ ! -z "$VERBOSE" ] || [ ! -z "$ESHOP_VERBOSE_MIGRATION_FACTS" ] ; then
+        print_variables_header "$BASH_SOURCE"
+        echo -e "\tESHOP_CE_MIGRATION_PATH: $ESHOP_CE_MIGRATION_PATH"
+        echo -e "\tESHOP_PE_MIGRATION_PATH: $ESHOP_PE_MIGRATION_PATH"
+        echo -e "\tESHOP_EE_MIGRATION_PATH: $ESHOP_EE_MIGRATION_PATH"
+        echo -e "\tESHOP_PROJECT_MIGRATION_PATH: $ESHOP_PROJECT_MIGRATION_PATH"
+        echo ""
+
+        ESHOP_VERBOSE_MIGRATION_FACTS_DISPLAYED="1"
+        export ESHOP_VERBOSE_MIGRATION_FACTS_DISPLAYED="1"
+    fi
+}
+
+function export_input_values {
+    [ ! -z "$VERBOSE" ] && export VERBOSE="$VERBOSE"
+
+    export ESHOP_CE_MIGRATION_PATH="$ESHOP_CE_MIGRATION_PATH"
+    export ESHOP_PE_MIGRATION_PATH="$ESHOP_PE_MIGRATION_PATH"
+    export ESHOP_EE_MIGRATION_PATH="$ESHOP_EE_MIGRATION_PATH"
+    export ESHOP_PROJECT_MIGRATION_PATH="$ESHOP_PROJECT_MIGRATION_PATH"
+}
+
+main
