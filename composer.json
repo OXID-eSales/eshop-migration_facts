@@ -3,7 +3,7 @@
     "description": "OXID eShop database migration facts",
     "license": "GPL-3.0",
     "require": {
-        "oxid-esales/eshop-edition-facts": "*"
+        "oxid-esales/eshop-edition-facts": "dev-rename_occurrences_of_existing_namespaces-ESDEV-4081"
     },
     "bin": ["./oe-eshop-migration_facts"]
 }
