@@ -1,7 +1,7 @@
 {
     "name": "oxid-esales/eshop-migration-facts",
     "description": "OXID eShop database migration facts",
-    "license": "GPL-3.0",
+    "license": "GPL-3.0-only",
     "require": {
         "oxid-esales/eshop-edition-facts": "*"
     },
